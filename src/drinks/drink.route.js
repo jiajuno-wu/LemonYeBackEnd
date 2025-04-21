@@ -42,4 +42,42 @@ router.post('/addDrink', upload.single('productImage') ,async(req,res) => {
     }
 })
 
+//Create API to retrive single drink 
+router.get("/:id", async(req,res)=>{
+  try {
+    const {id} = req.params;
+    const drink = await Drinks.findById(id);
+    if(!drink){
+      res.status(404).send({message: "drink are not Found!"})
+    }
+    res.status(200).send(drink)
+
+  } catch (error) {
+    console.error("Error fetching book", error);
+    res.status(500).send({message: "Failed to fetch drink"})
+  }
+})
+
+
+// get all drink
+router.get("/", async(req,res)=>{
+  try {
+
+    const drinks = await Drinks.find();
+    if(!drinks){
+      res.status(404).send({message:"There is no drink in the database"})
+    }
+    res.status(200).send(drinks);
+
+  } catch (error) {
+    console.error("Error fetching book", error);
+    res.status(500).send({message: "Failed to fetch drink"})
+  }
+})
+
+
+
+
+
+
 module.exports = router;
