@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 const express = require("express");
 const router = express.Router();
 const Drinks = require('../drinks/drinkSchema')
@@ -75,6 +77,36 @@ router.get("/", async(req,res)=>{
   }
 })
 
+// delete a Drink
+router.delete("/:id", async(req,res)=>{
+  try {
+    const {id} = req.params;
+    const drink = await Drinks.findById(id);
+
+    if(!drink){
+      return res.status(404).send({message: "drink is not Found!"}) 
+    }
+
+    // Delete Image
+    if (drink.image_url) {
+      const imgPath = path.join(__dirname, "..", ".." ,drink.image_url);  
+      // __dirname give /home/jiajun/Desktop/LemonYe Project/LemonYeBackEnd/src/drinks, ".." will go up one level.
+      fs.unlink(imgPath, (err) => {
+        if (err) {
+          console.error("Failed to delete image:", err);
+          return;
+        }
+      });
+    }
+
+    await Drinks.findByIdAndDelete(id);
+    res.status(200).send({message:"Drink deleted", drink:drink})
+
+  } catch (error) {
+    console.error("Error fetching book", error);
+    res.status(500).send({message: "Failed to delete drink"})
+  }
+})
 
 
 
