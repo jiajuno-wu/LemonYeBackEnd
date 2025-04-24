@@ -108,8 +108,45 @@ router.delete("/:id", async(req,res)=>{
   }
 })
 
+// update API
+/* what if successsfly detele image but fail to delete data in DB or via versa */
+router.put("/edit/:id", upload.single('productImage') ,async(req,res)=>{
 
+  try {
 
+    const {id} = req.params;
+    const updateData = { ...req.body };
+    const oldDrink = await Drinks.findById(id);
+
+    if(req.file){
+      // delete old image
+      if (oldDrink.image_url) {
+        const imgPath = path.join(__dirname, "..", ".." ,oldDrink.image_url);  
+        fs.unlink(imgPath, (err) => {
+          if (err) {
+            console.error("Failed to delete image:", err);
+          }
+        });
+      }
+
+      // update new image path to image_url 
+      updateData.image_url = `/uploads/productImages/${req.file.filename}`;
+    
+    }
+    const newDrink = await Drinks.findByIdAndUpdate(id, updateData, {
+      new: true,
+      runValidators: true,
+    });
+
+    res.status(200).send({message:"drink updated", drink:newDrink});
+
+  } catch (error) {
+
+    console.error('Update error:', error);
+    res.status(500).send({ message: 'unable to update' });
+
+  }
+})
 
 
 module.exports = router;
