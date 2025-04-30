@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 
 const router = express.Router();
 
-const jwt_sercet = "cao dong have no party";
+const jwt_sercet = "caodonghavenoparty";
 
 // send JWT token if pwd and username is correct.
 
