@@ -10,12 +10,13 @@ const port = process.env.PORT  || 3000;
 app.use("/uploads", express.static("uploads"));   
 // make expree to serve static file in folder uploads when request make to /uploads/....jpg
 
-
+app.use(express.json()); 
 // routes
 const drinkRoute = require('./src/drinks/drink.route');
+const adminRoute = require('./src/admin/admin.route');
 
 app.use('/api/drinks', drinkRoute);
-
+app.use('/api/auth', adminRoute);
 
 
 async function main() {
