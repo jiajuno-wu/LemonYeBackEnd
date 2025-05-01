@@ -1,4 +1,4 @@
-const express = require('express');
+const jwt = require('jsonwebtoken');
 const jwt_sercet = "caodonghavenoparty";
 
 const verifyAdminToken = (req,res,next) =>{
@@ -8,7 +8,7 @@ const verifyAdminToken = (req,res,next) =>{
         return res.status(401).json({ message: 'Access Denied. No token provided' });
     }
 
-    jwt.verify(token, JWT_SECRET, (err, user) => {
+    jwt.verify(token, jwt_sercet, (err, user) => {
         if (err) {
             return res.status(403).json({ message: 'Invalid credientials' });
         }

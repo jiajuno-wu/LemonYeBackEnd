@@ -20,7 +20,7 @@ const upload = multer({storage});
 
 
 
-router.post('/addDrink', upload.single('productImage') ,async(req,res) => {
+router.post('/addDrink',verifyAdminToken,upload.single('productImage') ,async(req,res) => {
     console.log(req.body);
     console.log(req.file);
     try {
@@ -78,7 +78,7 @@ router.get("/", async(req,res)=>{
 })
 
 // delete a Drink
-router.delete("/:id", async(req,res)=>{
+router.delete("/:id",verifyAdminToken,async(req,res)=>{
   try {
     const {id} = req.params;
     const drink = await Drinks.findById(id);
@@ -110,7 +110,7 @@ router.delete("/:id", async(req,res)=>{
 
 // update API
 /* what if successsfly detele image but fail to delete data in DB or via versa */
-router.put("/edit/:id", upload.single('productImage') ,async(req,res)=>{
+router.put("/edit/:id",verifyAdminToken ,upload.single('productImage') ,async(req,res)=>{
 
   try {
 
