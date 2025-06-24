@@ -1,8 +1,11 @@
 const express = require('express')
 const app = express()
 const cors = require('cors');
-app.use(cors());
-app.options('*', cors()); // Handle preflight requests
+
+app.use(cors({
+    origin:true,
+    credentials: true
+}));
 
 require('dotenv').config();
 
