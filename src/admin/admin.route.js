@@ -25,7 +25,20 @@ router.post('/admin', async(req,res) => {
             jwt_sercet, 
             {expiresIn:'12h'});
 
-        return res.status(200).send({message:"token sended succussfuly", token:token , username:admin.username});
+        
+        // set cookie with security options
+        res.cookie('token', token, {
+            httpOnly : true, // prevents XSS attack
+            secure : false,  // cookie will sent over http, need set true in production with SSL.
+            sameSite : 'lax',
+            maxAge : 24*60*60*1000 // 24 hour
+        })
+
+
+        return res.status(200).json({
+            message: "login successful",
+            username: admin.username
+        })
 
     } catch (error) {
         console.error("fail to verify user", error);

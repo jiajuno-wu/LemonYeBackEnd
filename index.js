@@ -1,10 +1,14 @@
 const express = require('express')
-const app = express()
+const app = express();
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
+
+// enable http cookie
+app.use(cookieParser());
 
 app.use(cors({
-    origin:true,
-    credentials: true
+  origin : "http://localhost:5173/",
+  credentials: true
 }));
 
 require('dotenv').config();
