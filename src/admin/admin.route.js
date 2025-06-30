@@ -1,13 +1,14 @@
 const Admin = require('../admin/admin.schema');
 const express = require('express');
 const jwt = require('jsonwebtoken');
+const verifyAdminToken = require('../middleware/verfiyAdminToken');
 
 const router = express.Router();
 
 const jwt_sercet = "caodonghavenoparty";
 
 // send JWT token if pwd and username is correct.
-
+// login
 router.post('/admin', async(req,res) => {
     try {
         console.log(req.body);
@@ -23,7 +24,7 @@ router.post('/admin', async(req,res) => {
         // generate jwt token
         const token = jwt.sign({id:admin._id, username:admin.username}, 
             jwt_sercet, 
-            {expiresIn:'12h'});
+            {expiresIn:'24h'});
 
         
         // set cookie with security options
@@ -45,5 +46,18 @@ router.post('/admin', async(req,res) => {
         res.status(401).send({message:"fail to login in as admin"});
     }
 })
+
+router.post('/logout', (req,res) => {
+    res.clearCookie('token');
+    return res.json({message:'logged out successfully'});
+})
+
+router.get('/me', verifyAdminToken, (req,res)=>{
+    return res.json({
+        isAuthenticated:true,
+        username : req.user.username
+    })
+})
+
 
 module.exports = router;
