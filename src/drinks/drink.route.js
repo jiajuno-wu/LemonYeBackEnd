@@ -27,13 +27,20 @@ router.post('/addDrink',verifyAdminToken,upload.single('productImage') ,async(re
         const {product_name_en,
             product_name_ch,
             product_price,
-            product_description} = req.body;
+            product_description,
+            avaiable,
+            popular,
+            recommend,
+            } = req.body;
         const imagePath = `/uploads/productImages/${req.file.filename}`;     
         const drink = new Drinks({
             product_name_en : product_name_en,
             product_name_ch : product_name_ch,
             product_price : product_price,
             product_description : product_description,
+            avaiable: avaiable === 'true',
+            popular: popular === 'true',
+            recommend: recommend === 'true',
             image_url : imagePath
         });
         await drink.save();
