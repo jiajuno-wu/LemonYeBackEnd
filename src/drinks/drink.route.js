@@ -34,6 +34,9 @@ router.post('/addDrink',verifyAdminToken,upload.single('productImage') ,async(re
             product_name_ch : product_name_ch,
             product_price : product_price,
             product_description : product_description,
+            avaiable: avaiable === 'true',
+            popular: popular === 'true',
+            recommend: recommend === 'true',
             image_url : imagePath
         });
         await drink.save();
